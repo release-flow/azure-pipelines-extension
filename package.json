@@ -1,0 +1,40 @@
+{
+  "name": "azure-pipelines-extension",
+  "version": "1.0.0",
+  "description": "Versioning helper extensions for Azure DevOps",
+  "main": "index.js",
+  "scripts": {
+    "clean": "npx rimraf 'dist/*' 'tasks/**/*.js'",
+    "build": "tsc",
+    "pretest": "npm run build",
+    "test": "mocha --require ts-node/register 'tasks/**/*.spec.ts'"
+  },
+  "keywords": [
+    "azure-pipelines"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@release-flow/release-flow": "^0.1.1",
+    "azure-pipelines-task-lib": "^3.1.8"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.21",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.7.6",
+    "@types/q": "^1.5.5",
+    "chai": "^4.3.4",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-mocha": "^9.0.0",
+    "eslint-plugin-prettier": "^3.4.1",
+    "fast-glob": "^3.2.7",
+    "mocha": "^9.1.1",
+    "prettier": "^2.3.2",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.2"
+  }
+}

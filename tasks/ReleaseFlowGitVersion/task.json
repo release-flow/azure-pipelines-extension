@@ -1,0 +1,123 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+  "id": "cf8aa1fc-00a2-4a91-a81c-5a9a13fde65b",
+  "name": "ReleaseFlowGitVersion",
+  "friendlyName": "Release Flow Git Version",
+  "description": "Generates build version numbers from a Git repository based on Release Flow conventions",
+  "helpMarkDown": "Add this task to generate build version numbers based on Release Flow conventions",
+  "category": "Azure Pipelines",
+  "author": "Rich Tebb <rich@tebb.io>",
+  "visibility": ["Build"],
+  "minimumAgentVersion": "2.144.0",
+  "version": {
+    "Major": 0,
+    "Minor": 1,
+    "Patch": 0
+  },
+  "instanceNameFormat": "Release Flow Git Version",
+  "groups": [
+    {
+      "name": "basic",
+      "displayName": "Basic Settings",
+      "isExpanded": true
+    },
+    {
+      "name": "advanced",
+      "displayName": "Advanced",
+      "isExpanded": false
+    }
+  ],
+  "inputs": [
+    {
+      "name": "sourceBranch",
+      "type": "string",
+      "label": "Source branch",
+      "defaultValue": "$(Build.SourceBranch)",
+      "required": true,
+      "groupName": "basic"
+    },
+    {
+      "name": "targetBranch",
+      "type": "string",
+      "label": "Target branch",
+      "defaultValue": "$(System.PullRequest.TargetBranch)",
+      "required": false,
+      "groupName": "basic"
+    },
+    {
+      "name": "updateBuildNumber",
+      "type": "boolean",
+      "label": "Update build number",
+      "defaultValue": "false",
+      "required": false,
+      "groupName": "basic",
+      "helpMarkDown": "Indicates whether to update the build number to the semantic version"
+    },
+    {
+      "name": "repoRoot",
+      "type": "filePath",
+      "label": "Repository root directory",
+      "defaultValue": "",
+      "required": false,
+      "groupName": "advanced",
+      "helpMarkDown": "Directory where the Git repository is located.  Empty is the root of the repo for the current build, which is $(Build.SourcesDirectory)"
+    }
+  ],
+  "execution": {
+    "Node10": {
+      "target": "index.js"
+    }
+  },
+  "outputVariables": [
+    { "name": "Major", "description": "The major version number" },
+    { "name": "Minor", "description": "The minor version number" },
+    { "name": "Patch", "description": "The patch version number" },
+    { "name": "MajorMinor", "description": "The major and minor version number, e.g. 1.2" },
+    { "name": "MajorMinorPatch", "description": "The major, minor, and patch version number, e.g. 1.2.3" },
+    { "name": "BranchName", "description": "The name of the branch or tag that triggered the build, e.g. release/3.0" },
+    {
+      "name": "EscapedBranchName",
+      "description": "The branch name, escaped for SemVer compatibility e.g. release-3.0"
+    },
+    {
+      "name": "BuildType",
+      "description": "The build type that was inferred from the source branch and repository state. One of: alpha, beta, working-branch, pull-request, release"
+    },
+    {
+      "name": "PreReleaseLabel",
+      "description": "The pre-release label that was inferred from the source branch and repository state"
+    },
+    { "name": "Sha", "description": "The hash of the commit that triggered the build" },
+    { "name": "ShortSha", "description": "The abbreviated hash of the commit that triggered the build" },
+    {
+      "name": "CommitDate",
+      "description": "The date and time of the commit that triggered the build, in ISO 8601 standard format"
+    },
+    {
+      "name": "CommitsSinceVersionSource",
+      "description": "The number of commits on the ancestry path between the current commit and the last version source"
+    },
+    {
+      "name": "CommitsSinceVersionSourcePadded",
+      "description": "Number of commits since version source padded to 4 digits, e.g. 0001"
+    },
+    { "name": "VersionSourceSha", "description": "The hash of the version source commit" },
+    { "name": "PreReleaseTag", "description": "The NuGet pre-release tag" },
+    { "name": "PreReleaseTagWithDash", "description": "The NuGet pre-release tag, prefixed with a dash" },
+    { "name": "PreReleaseNumber", "description": "The NuGet pre-release number" },
+    {
+      "name": "FullBuildMetaData",
+      "description": "The full build metadata, e.g. 1.Branch.release/3.0.0.Sha.28c853159a46b5a87e6cc9c4f6e940c59d6bc68a"
+    },
+    { "name": "SemVer", "description": "The semantic version, e.g. 3.0.0-beta.1" },
+    { "name": "LegacySemVer", "description": "The legact (v1) semantic version, e.g. 3.0.0-beta1" },
+    { "name": "AssemblySemVer", "description": "The assembly version, e.g. 3.2.0.0" },
+    { "name": "AssemblySemFileVer", "description": "The assemby file version, e.g. 3.2.1.0" },
+    {
+      "name": "InformationalVersion",
+      "description": "The assembly informational version, e.g. 3.0.0-beta.1+1.Branch.release/3.0.0.Sha.28c853159a46b5a87e6cc9c4f6e940c59d6bc68a"
+    },
+    { "name": "NuGetVersion", "description": "The NuGet-compatible version, e.g. 3.0.0-beta0001" },
+    { "name": "NuGetPreReleaseTag", "description": "The NuGet-compatible pre-release tag, e.g. beta0001" }
+  ]
+}
