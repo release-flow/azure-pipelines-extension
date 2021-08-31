@@ -7,7 +7,8 @@
     "clean": "npx rimraf 'dist/*' 'tasks/**/*.js'",
     "build": "tsc",
     "pretest": "npm run build",
-    "test": "mocha --require ts-node/register 'tasks/**/*.spec.ts'"
+    "test": "mocha --require ts-node/register 'tasks/**/*.spec.ts'",
+    "build:extension": "build/extension.mjs"
   },
   "keywords": [
     "azure-pipelines"

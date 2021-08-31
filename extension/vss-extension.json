@@ -1,0 +1,65 @@
+{
+  "manifestVersion": 1,
+  "id": "release-flow-git-version",
+  "name": "Release Flow Version",
+  "version": "0.0.0",
+  "publisher": "release-flow-dev",
+  "public": false,
+  "repository": {
+    "type": "git",
+    "uri": "https://github.com/release-flow/azure-pipelines-extension"
+  },
+  "targets": [
+    {
+      "id": "Microsoft.VisualStudio.Services"
+    }
+  ],
+  "description": "Tools for versioning builds in Azure Pipelines.",
+  "categories": ["Azure Pipelines"],
+  "content": {
+    "details": {
+      "path": "README.md"
+    },
+    "license": {
+      "path": "LICENSE"
+    }
+  },
+  "tags": ["release-flow", "git", "version", "versioning", "build"],
+  "links": {
+    "home": {
+      "uri": "https://github.com/release-flow/azure-pipelines-extension"
+    },
+    "repository": {
+      "uri": "https://github.com/release-flow/azure-pipelines-extension"
+    },
+    "issues": {
+      "uri": "https://github.com/release-flow/azure-pipelines-extension/issues"
+    }
+  },
+  "branding": {
+    "color": "rgb(6,168,229)",
+    "theme": "light"
+  },
+  "icons": {
+    "default": "images/extension-icon.png"
+  },
+  "files": [
+    {
+      "path": "ReleaseFlowGitVersion"
+    },
+    {
+      "path": "node_modules",
+      "packagePath": "ReleaseFlowGitVersion/node_modules"
+    }
+  ],
+  "contributions": [
+    {
+      "id": "release-flow-git-version",
+      "type": "ms.vss-distributed-task.task",
+      "targets": ["ms.vss-distributed-task.tasks"],
+      "properties": {
+        "name": "ReleaseFlowGitVersion"
+      }
+    }
+  ]
+}
