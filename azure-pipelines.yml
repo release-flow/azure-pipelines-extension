@@ -52,10 +52,10 @@ jobs:
 
   - script: >-
       npx rfver
-      _build/extension/ReleaseFlowVersion/lib/cli.js
       --source-ref $(Build.SourceBranch)
       --target-branch '$(System.PullRequest.TargetBranch)'
       --output azure-pipelines
+      --debug=$(System.Debug)
     displayName: 'Set build number'
     name: release_flow_version
 
