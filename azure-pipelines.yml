@@ -55,6 +55,7 @@ jobs:
       --source-ref $(Build.SourceBranch)
       --target-branch '$(System.PullRequest.TargetBranch)'
       --output azure-pipelines
+      --use-origin-branches
       --debug=$(System.Debug)
     displayName: 'Set build number'
     name: release_flow_version
