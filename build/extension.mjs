@@ -109,7 +109,6 @@ async function mungeExtensionManifest() {
   console.log(`Munging extension manifest ${manifestFile}`);
   let jsonText = await fsPromises.readFile(manifestFile);
   let manifest = JSON.parse(jsonText);
-  console.log(manifest.version);
   const opts = getOptions(argv);
 
   manifest.version = opts.version.extensionVersion;

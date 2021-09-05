@@ -68,14 +68,18 @@ jobs:
       customCommand: 'test'
 
   - script: >-
+      echo $(ReleaseFlowVersion.Major)
+      echo $(Major)
+
+  - script: >-
       ./build/extension.mjs
-      --major=$(release_flow_version.Major)
-      --minor=$(release_flow_version.Minor)
-      --patch=$(release_flow_version.Patch)
-      --branchName=$(release_flow_version.BranchName)
-      --buildType=$(release_flow_version.BuildType)
-      --preReleaseNumber=$(release_flow_version.CommitsSinceVersionSource)
-      --preReleaseLabel=$(release_flow_version.PreReleaseLabel)
+      --major=$(ReleaseFlowVersion.Major)
+      --minor=$(ReleaseFlowVersion.Minor)
+      --patch=$(ReleaseFlowVersion.Patch)
+      --branchName=$(ReleaseFlowVersion.BranchName)
+      --buildType=$(ReleaseFlowVersion.BuildType)
+      --preReleaseNumber=$(ReleaseFlowVersion.CommitsSinceVersionSource)
+      --preReleaseLabel=$(ReleaseFlowVersion.PreReleaseLabel)
       --publisherTest=$(PublisherId.Develop)
       --publisherRelease=$(PublisherId.Release)
     displayName: Publish extension
