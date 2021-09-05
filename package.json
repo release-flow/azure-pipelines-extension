@@ -1,6 +1,6 @@
 {
   "name": "azure-pipelines-extension",
-  "version": "1.0.0",
+  "version": "1.0.0-local.0",
   "description": "Versioning helper extensions for Azure DevOps",
   "main": "index.js",
   "scripts": {
@@ -36,6 +36,7 @@
     "prettier": "^2.3.2",
     "rimraf": "^3.0.2",
     "ts-node": "^10.2.1",
-    "typescript": "^4.4.2"
+    "typescript": "^4.4.2",
+    "yargs": "^17.1.1"
   }
 }

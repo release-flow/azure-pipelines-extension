@@ -19,4 +19,8 @@ strategy:
   kind: SemVer # or Milestone
 ```
 
-The [release-flow documentation](https://github.com/release-flow/release-flow#readme) provides a detailed description of the configuration options.
+The [release-flow documentation](https://github.com/release-flow/release-flow#readme) provides a detailed description of the configuration file options.
+
+### Inputs
+
+### Outputs

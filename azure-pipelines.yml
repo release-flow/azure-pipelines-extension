@@ -1,0 +1,107 @@
+# Node.js with gulp
+# Build a Node.js project using the gulp task runner.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+name: $(Date:yyyyMMdd)$(Rev:.r)
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - release/*
+    - refs/tags/v*
+    # - feature/*
+    # - bugfix/*
+    # - hotfix/*
+
+variables:
+  - group: publisher-ids
+  - name: buildCounter
+    value: $[counter(variables['Build.SourceBranch'])]
+  - name: extensionName
+    value: ReleaseFlowGitVersion
+
+jobs:
+- job: Build
+  displayName: Build and test
+  pool:
+    vmImage: 'ubuntu-20.04'
+
+  steps:
+  # To optimise build times on Microsoft-hosted agents, keep the Node.js version in sync
+  # with the one installed on their agents. See
+  # https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md
+  # for definition of the ubuntu-20.04 image.
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '14.x'
+      checkLatest: false
+    displayName: 'Install Node.js version 14.x'
+
+  - task: TfxInstaller@3
+    displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.9.x'
+    inputs:
+      version: v0.9.x
+      checkLatest: false
+
+  - task: Npm@1
+    displayName: 'NPM install'
+    inputs:
+      command: install
+
+  - script: >-
+      npx rfver
+      _build/extension/ReleaseFlowVersion/lib/cli.js
+      --source-ref $(Build.SourceBranch)
+      --target-branch '$(System.PullRequest.TargetBranch)'
+      --output azure-pipelines
+    displayName: 'Set build number'
+    name: release_flow_version
+
+  - task: Npm@1
+    displayName: 'Build/test the extension'
+    inputs:
+      command: custom
+      verbose: false
+      customCommand: 'test'
+
+  - script: >-
+      ./build/extension.mjs
+      --major=$(release_flow_version.Major)
+      --minor=$(release_flow_version.Minor)
+      --patch=$(release_flow_version.Patch)
+      --branchName=$(release_flow_version.BranchName)
+      --buildType=$(release_flow_version.BuildType)
+      --preReleaseNumber=$(release_flow_version.CommitsSinceVersionSource)
+      --preReleaseLabel=$(release_flow_version.PreReleaseLabel)
+      --publisherTest=$(PublisherId.Develop)
+      --publisherRelease=$(PublisherId.Release)
+    displayName: Publish extension
+
+  - task: PackageAzureDevOpsExtension@3
+    displayName: 'Package extension into VSIX file'
+    inputs:
+      rootFolder: $(System.DefaultWorkingDirectory)/dist/
+      outputPath: $(Build.ArtifactStagingDirectory)/$(extensionName)-$(Build.BuildNumber).vsix
+      extensionVisibility: 'public'
+      extensionPricing: free
+      updateTasksId: true
+      patternManifest: vss-extension.json
+      # publisherId: test
+      # extensionVersion: '$(Build.BuildNumber)'
+      # localizationRoot: locale
+      # extensionId: 'ext-id'
+      # extensionTag: 'ext-tag'
+      # extensionName: 'ext-name'
+      # extensionVersion: '$(Build.BuildNumber)'
+      # updateTasksVersionType: major | minor | patch
+      # bypassLocalValidation: true
+      # arguments: arg1
+      # cwd: '$(System.DefaultWorkingDirectory)'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: vsix'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(extensionName)-$(Build.BuildNumber).vsix'
+      ArtifactName: vsix
