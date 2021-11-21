@@ -35,9 +35,9 @@ jobs:
   # for definition of the ubuntu-20.04 image.
   - task: NodeTool@0
     inputs:
-      versionSpec: '14.x'
+      versionSpec: '12.22.x'
       checkLatest: false
-    displayName: 'Install Node.js version 14.x'
+    displayName: 'Install Node.js version 12.22.x'
 
   - task: TfxInstaller@3
     displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.9.x'
