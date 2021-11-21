@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-import fg from 'fast-glob';
-import * as path from 'path';
-import * as fs from 'fs';
-import * as fsPromises from 'fs/promises'
-import { copyFile } from 'fs/promises';
-import { spawn } from 'child_process';
-import yargs from 'yargs';
+const fg = require('fast-glob');
+const path = require('path');
+const fs = require('fs');
+const fsPromises = fs.promises;
+const spawn = require('child_process').spawn;
+const yargs = require('yargs');
 
 function run(command) {
   return new Promise((resolve, reject) => {
@@ -44,7 +43,7 @@ async function copyFilesToOutput(source, targetDir, sourceDir) {
     const source = path.join(sourceDir, entry);
     const target = path.join(targetDir, entry);
     console.log(`${source} -> ${target} (${path.dirname(entry)})`);
-    await copyFile(source, target);
+    await fsPromises.copyFile(source, target);
   }
 }
 
@@ -207,4 +206,4 @@ console.log(`CWD = ${process.cwd()}`);
 
 const outputDir = argv.outputDir;
 
-await main();
+main();

@@ -67,12 +67,12 @@ jobs:
       verbose: false
       customCommand: 'test'
 
-  - script: >-
+  - script: >
       echo $(ReleaseFlowVersion.Major)
       echo $(Major)
 
   - script: >-
-      ./build/extension.mjs
+      ./build/extension.js
       --major=$(ReleaseFlowVersion.Major)
       --minor=$(ReleaseFlowVersion.Minor)
       --patch=$(ReleaseFlowVersion.Patch)
