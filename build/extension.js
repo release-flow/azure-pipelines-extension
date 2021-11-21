@@ -70,20 +70,15 @@ function getOptions(args) {
     buildType,
     preReleaseTag: args.preReleaseLabel.replace(/[^A-Za-z0-9\-_]/, '-'),
     extensionVersion: `${args.major}.${args.minor}.${args.patch}.${args.preReleaseNumber}`,
-    publisher: args.publisherTest,
+    publisher: args.publisher,
   };
   let taskPatchBase = args.preReleaseNumber;
 
   switch (buildType) {
-    case 'beta':
-      version.publisher = args.publisherRelease;
-      break;
-
     case 'release':
       version.isPreRelease = false;
       version.preReleaseTag = null;
       version.extensionVersion = `${args.major}.${args.minor}.${args.patch}`;
-      version.publisher = args.publisherRelease;
       taskPatchBase = args.patch;
       break;
 
@@ -137,20 +132,25 @@ async function copyTaskFiles(taskName) {
   // Copy across task files
   await copyFilesToOutput(['**/*.js', 'task.json', '!tests/**/*'], taskOutputDir, taskInputDir);
 
+
+}
+
+async function installNpm() {
   // NPM install
-  await copyFilesToOutput(['package.json', 'package-lock.json'], taskOutputDir, '.');
+  await copyFilesToOutput(['package.json', 'package-lock.json'], outputDir, '.');
   // Ensure node_modules in dist
   const command = {
     cmd: 'npm',
     args: ['ci', '--production'],
-    cwd: taskOutputDir
+    cwd: outputDir
   }
   await run(command);
 }
 
 async function main() {
   await copyExtensionFiles();
-  await copyTaskFiles('ReleaseFlowGitVersion');
+  await installNpm();
+  await copyTaskFiles('ReleaseFlowGitVersionV0');
 }
 
 
@@ -184,12 +184,8 @@ const argv = yargs(process.argv.slice(2))
       default: 'local',
       type: 'string',
     },
-    publisherTest: {
-      default: 'mbstest',
-      type: 'string',
-    },
-    publisherRelease: {
-      default: 'mbstest',
+    publisher: {
+      default: 'local',
       type: 'string',
     },
     outputDir: {

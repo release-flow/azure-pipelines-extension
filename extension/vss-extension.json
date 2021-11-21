@@ -45,11 +45,11 @@
   },
   "files": [
     {
-      "path": "ReleaseFlowGitVersion"
+      "path": "ReleaseFlowGitVersionV0"
     },
     {
       "path": "node_modules",
-      "packagePath": "ReleaseFlowGitVersion/node_modules"
+      "packagePath": "ReleaseFlowGitVersionV0/node_modules"
     }
   ],
   "contributions": [
@@ -58,7 +58,7 @@
       "type": "ms.vss-distributed-task.task",
       "targets": ["ms.vss-distributed-task.tasks"],
       "properties": {
-        "name": "ReleaseFlowGitVersion"
+        "name": "ReleaseFlowGitVersionV0"
       }
     }
   ]
