@@ -65,3 +65,4 @@ tasks/**/*.js
 tmp/
 .taskkey
 *.bak
+*.vsix

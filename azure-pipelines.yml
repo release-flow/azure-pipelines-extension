@@ -69,7 +69,7 @@ jobs:
       echo $(Major)
 
   - script: >-
-      ./build/extension.js
+      ./build/build.js
       --major=$(ReleaseFlowVersion.Major)
       --minor=$(ReleaseFlowVersion.Minor)
       --patch=$(ReleaseFlowVersion.Patch)
@@ -77,8 +77,7 @@ jobs:
       --buildType=$(ReleaseFlowVersion.BuildType)
       --preReleaseNumber=$(ReleaseFlowVersion.CommitsSinceVersionSource)
       --preReleaseLabel=$(ReleaseFlowVersion.PreReleaseLabel)
-      --publisherTest=$(PublisherId.Develop)
-      --publisherRelease=$(PublisherId.Release)
+      --publisher=$(PublisherId.Develop)
     displayName: Publish extension
 
   - task: PackageAzureDevOpsExtension@3
