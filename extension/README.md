@@ -26,7 +26,7 @@ The [release-flow documentation](https://github.com/release-flow/release-flow#re
 | Name         | Description |
 | ------------ | ----------- |
 | `sourceBranch` | Specifies the branch on which the build is taking place, or from which the build was triggered, e.g. `$(Build.SourceBranch)`. |
-| `targetBranch` | If the build is triggered by a PR, specifies the target branch of the PR. |
+| `targetBranch` | If the build is triggered by a PR, specifies the target branch of the PR, e.g. `$(System.PullRequest.TargetBranch)`. |
 | `updateBuildNumber` | Indicates whether to update the build number to the calculated semantic version. |
 | `repoRoot` | Specifies the directory where the Git repository is located.  Leave this empty to use the root of the repo for the current build, which is `$(Build.SourcesDirectory)`. |
 
