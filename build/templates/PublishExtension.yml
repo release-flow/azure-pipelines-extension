@@ -1,0 +1,54 @@
+###############################################################################
+# PublishExtension.yml
+# Azure Pipelines stage template that publishes extensions from an artifact to
+# the Visual Studio marketplace.
+#
+# Assumes that the variables from ReleaseFlowBranchVars are defined externally.
+###############################################################################
+
+parameters:
+
+# The name of the ADO deployment environment to target.
+- name: environmentName
+  displayName: Environment name
+  type: string
+
+# The name of the pipeline artifact containing the VSIX to be published.
+- name: artifactName
+  type: string
+
+jobs:
+- deployment: publish_marketplace
+  displayName: Publish to Visual Studio Marketplace
+  variables:
+    artifactFolder: '$(Pipeline.Workspace)/${{ parameters.artifactName }}'
+    vsixFile: '$(artifactFolder)/$(extensionName)*.vsix'
+  environment: ${{ parameters.environmentName }}
+  strategy:
+    runOnce:
+      preDeploy:
+        steps:
+        - pwsh: |
+            $folder = '$(artifactFolder)'
+            Write-Output "Cleaning up $folder"
+            ls $folder -ErrorAction Continue
+            if (Test-Path $folder) {
+              $files = Get-ChildItem -Path $folder -Include *.* -File -Recurse
+              $files | foreach { Remove-Item $_ }
+            }
+          displayName: 'Clean up artifact folder'
+      deploy:
+        steps:
+        - task: TfxInstaller@3
+          displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.9.x'
+          inputs:
+            version: v0.9.x
+            checkLatest: false
+
+        - task: PublishAzureDevOpsExtension@3
+          displayName: 'Publish Extension to marketplace'
+          inputs:
+            connectedServiceName: 'marketplace-publish'
+            fileType: vsix
+            vsixFile: '$(vsixFile)'
+            updateTasksVersion: false
