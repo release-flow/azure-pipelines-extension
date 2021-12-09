@@ -21,19 +21,23 @@ trigger:
     # - hotfix/*
 
 variables:
-  - group: publisher-ids
+- template: templates/ReleaseFlowBranchVars.azp.yml
+  parameters:
+    trunkBranchName: main
 
-  - name: buildCounter
-    value: $[counter(variables['Build.SourceBranch'])]
+- group: publisher-ids
 
-  - name: extensionName
-    value: ReleaseFlowGitVersion
+- name: buildCounter
+  value: $[counter(variables['Build.SourceBranch'])]
 
-  - name: overridePublish
-    value: ${{ eq(parameters.overridePublish, True) }}
+- name: extensionName
+  value: ReleaseFlowGitVersion
 
-  - name: vsixArtifactName
-    value: vsix
+- name: overridePublish
+  value: ${{ eq(parameters.overridePublish, True) }}
+
+- name: vsixArtifactName
+  value: vsix
 
 stages:
 - stage: build
@@ -86,8 +90,9 @@ stages:
         customCommand: 'test'
 
     - script: >
-        echo $(ReleaseFlowVersion.Major)
-        echo $(Major)
+        echo "TrunkBranch: $(ReleaseFlow.IsTrunkBranch)"
+        echo "DevBranch: $(ReleaseFlow.IsDevBranch)"
+        echo "ReleaseBranch: $(ReleaseFlow.IsReleaseBranch)"
 
     - script: >-
         ./build/build.js
