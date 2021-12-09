@@ -31,7 +31,7 @@ jobs:
         - pwsh: |
             $folder = '$(artifactFolder)'
             Write-Output "Cleaning up $folder"
-            ls $folder -ErrorAction Continue
+            Get-ChildItem $folder -ErrorAction Continue
             if (Test-Path $folder) {
               $files = Get-ChildItem -Path $folder -Include *.* -File -Recurse
               $files | foreach { Remove-Item $_ }
