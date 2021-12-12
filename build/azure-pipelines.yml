@@ -111,7 +111,7 @@ stages:
       inputs:
         rootFolder: $(System.DefaultWorkingDirectory)/dist/
         outputPath: $(Build.ArtifactStagingDirectory)/$(extensionName)-$(Build.BuildNumber).vsix
-        extensionVisibility: 'public'
+        extensionVisibility: 'private'
         extensionPricing: free
         updateTasksId: true
         patternManifest: vss-extension.json
