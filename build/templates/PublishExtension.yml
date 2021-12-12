@@ -39,6 +39,12 @@ jobs:
           displayName: 'Clean up artifact folder'
       deploy:
         steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '12.22.x'
+            checkLatest: false
+          displayName: 'Use Node.js version 12.22.x'
+
         - task: TfxInstaller@3
           displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.9.x'
           inputs:

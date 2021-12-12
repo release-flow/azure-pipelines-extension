@@ -59,7 +59,7 @@ stages:
       inputs:
         versionSpec: '12.22.x'
         checkLatest: false
-      displayName: 'Install Node.js version 12.22.x'
+      displayName: 'Use Node.js version 12.22.x'
 
     - task: Npm@1
       displayName: 'NPM install'
