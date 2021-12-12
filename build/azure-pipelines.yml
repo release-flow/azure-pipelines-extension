@@ -52,8 +52,13 @@ stages:
     - name: publisherId
       ${{ if eq(variables['ReleaseFlow.IsReleaseBranch'], True) }}:
         value: $(PublisherId.Release)
-      ${{ if ne(variables['ReleaseFlow.IsReleaseBranch'], True) }}:
+      ${{ else }}:
         value: $(PublisherId.Develop)
+    - name: extensionVisibility
+      ${{ if eq(variables['ReleaseFlow.IsReleaseBranch'], True) }}:
+        value: public
+      ${{ else }}:
+        value: private
     steps:
     - task: NodeTool@0
       inputs:
@@ -111,7 +116,7 @@ stages:
       inputs:
         rootFolder: $(System.DefaultWorkingDirectory)/dist/
         outputPath: $(Build.ArtifactStagingDirectory)/$(extensionName)-$(Build.BuildNumber).vsix
-        extensionVisibility: 'private'
+        extensionVisibility: '$(extensionVisibility)'
         extensionPricing: free
         updateTasksId: true
         patternManifest: vss-extension.json
