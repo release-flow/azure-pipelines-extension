@@ -156,6 +156,17 @@ async function mungeExtensionManifest() {
     // Increment the patch number with each build
     const buildNum = (argv.preReleaseNumber * 1000) + argv.buildCounter
     manifest.version += `.${buildNum}`;
+
+    manifest.galleryFlags = manifest.galleryFlags || [];
+    manifest.galleryFlags.push("Preview");
+
+    if (argv.buildType === 'beta') {
+      manifest.public = true;
+    } else {
+      manifest.public = false;
+    }
+  } else {
+    manifest.public = true;
   }
 
   log.debug(`Override extension version = ${manifest.version}`);

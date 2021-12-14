@@ -54,11 +54,7 @@ stages:
         value: $(PublisherId.Release)
       ${{ else }}:
         value: $(PublisherId.Develop)
-    - name: extensionVisibility
-      ${{ if eq(variables['ReleaseFlow.IsReleaseBranch'], True) }}:
-        value: public
-      ${{ else }}:
-        value: private
+
     steps:
     - task: NodeTool@0
       inputs:
@@ -116,21 +112,8 @@ stages:
       inputs:
         rootFolder: $(System.DefaultWorkingDirectory)/dist/
         outputPath: $(Build.ArtifactStagingDirectory)/$(extensionName)-$(Build.BuildNumber).vsix
-        extensionVisibility: '$(extensionVisibility)'
-        extensionPricing: free
         updateTasksId: true
         patternManifest: vss-extension.json
-        # publisherId: test
-        # extensionVersion: '$(Build.BuildNumber)'
-        # localizationRoot: locale
-        # extensionId: 'ext-id'
-        # extensionTag: 'ext-tag'
-        # extensionName: 'ext-name'
-        # extensionVersion: '$(Build.BuildNumber)'
-        # updateTasksVersionType: major | minor | patch
-        # bypassLocalValidation: true
-        # arguments: arg1
-        # cwd: '$(System.DefaultWorkingDirectory)'
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: vsix'
@@ -160,7 +143,7 @@ stages:
     )
 
   jobs:
-  - template: templates/PublishExtension.yml
+  - template: templates/PublishExtension.azp.yml
     parameters:
       environmentName: '${{ variables.extensionName }}-test'
       artifactName: ${{ variables.vsixArtifactName }}
@@ -179,7 +162,7 @@ stages:
     )
 
   jobs:
-  - template: templates/PublishExtension.yml
+  - template: templates/PublishExtension.azp.yml
     parameters:
       environmentName: '${{ variables.extensionName }}-release'
       artifactName: ${{ variables.vsixArtifactName }}

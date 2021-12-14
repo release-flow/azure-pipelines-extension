@@ -1,5 +1,5 @@
 ###############################################################################
-# PublishExtension.yml
+# PublishExtension.azp.yml
 # Azure Pipelines stage template that publishes extensions from an artifact to
 # the Visual Studio marketplace.
 #
