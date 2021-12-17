@@ -158,7 +158,12 @@ stages:
   condition: >-
     and(
       succeeded(),
-      eq(variables['ReleaseFlow.IsReleaseBranch'], True)
+      or(
+        eq(variables['ReleaseFlow.IsRelease'], True),
+        and(
+          eq(variables['ReleaseFlow.IsReleaseBranch'], True),
+          eq(variables['overridePublish'], True))
+        )
     )
 
   jobs:
