@@ -7,7 +7,7 @@ The extension's [readme file](./extension/README.md) provides a user manual.
 
 ## Build and Deployment
 
-Unsurprisingly, this extension uses Release Flow conventions :)
+Unsurprisingly, this repo uses Release Flow conventions :)
 
 The extension is built and deployed via an [Azure DevOps
 pipeline](https://dev.azure.com/richtebb/release-flow/_build?definitionId=7).
