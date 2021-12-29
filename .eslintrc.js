@@ -21,9 +21,7 @@ module.exports = {
         devDependencies: [
           '**/*.spec.ts',
           '**/tests/**/*.ts',
-          'tasks/ReleaseFlowVersion/lib/GitGraphTestHelper.ts',
-          'tools/**/*.js',
-          'gulpfile.js'
+          'build/**/*.js'
         ]
       }
     ],

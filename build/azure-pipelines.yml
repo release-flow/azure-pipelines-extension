@@ -1,0 +1,173 @@
+# Builds the extension and publishes it
+
+parameters:
+  # Overrides the default setting (based on branch type) and publishes packages
+  # and documentation even if the build is on a development branch
+- name:  overridePublish
+  displayName: Publish build artifacts
+  type: boolean
+  default: false
+
+name: $(Date:yyyyMMdd)$(Rev:.r)
+trigger:
+  batch: true
+  branches:
+    include:
+    - main
+    - release/*
+    - refs/tags/v*
+    # - feature/*
+    # - bugfix/*
+    # - hotfix/*
+
+variables:
+- template: templates/ReleaseFlowBranchVars.azp.yml
+  parameters:
+    trunkBranchName: main
+
+- group: publisher-ids
+
+- name: buildCounter
+  value: $[counter(variables['Build.SourceBranch'])]
+
+- name: extensionName
+  value: ReleaseFlowGitVersion
+
+- name: overridePublish
+  value: ${{ eq(parameters.overridePublish, True) }}
+
+- name: vsixArtifactName
+  value: vsix
+
+stages:
+- stage: build
+  displayName: Build artifacts
+
+  jobs:
+  - job: Build
+    displayName: Build and test
+    pool:
+      vmImage: 'ubuntu-20.04'
+    variables:
+    - name: publisherId
+      ${{ if eq(variables['ReleaseFlow.IsReleaseBranch'], True) }}:
+        value: $(PublisherId.Release)
+      ${{ else }}:
+        value: $(PublisherId.Develop)
+
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '12.22.x'
+        checkLatest: false
+      displayName: 'Use Node.js version 12.22.x'
+
+    - task: Npm@1
+      displayName: 'NPM install'
+      inputs:
+        command: install
+
+    - script: >-
+        npx rfver
+        --source-ref $(Build.SourceBranch)
+        --target-branch '$(System.PullRequest.TargetBranch)'
+        --output azure-pipelines
+        --use-origin-branches
+        --debug=$(System.Debug)
+      displayName: 'Set build number'
+      name: release_flow_version
+
+    - task: TfxInstaller@3
+      displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.9.x'
+      inputs:
+        version: v0.9.x
+        checkLatest: false
+
+    - task: Npm@1
+      displayName: 'Build/test the extension'
+      inputs:
+        command: custom
+        verbose: false
+        customCommand: 'test'
+
+    - script: >
+        echo "TrunkBranch: $(ReleaseFlow.IsTrunkBranch)"
+        echo "DevBranch: $(ReleaseFlow.IsDevBranch)"
+        echo "ReleaseBranch: $(ReleaseFlow.IsReleaseBranch)"
+
+    - script: >-
+        ./build/build.js
+        --major=$(ReleaseFlowVersion.Major)
+        --minor=$(ReleaseFlowVersion.Minor)
+        --patch=$(ReleaseFlowVersion.Patch)
+        --branchName=$(ReleaseFlowVersion.BranchName)
+        --buildType=$(ReleaseFlowVersion.BuildType)
+        --preReleaseNumber=$(ReleaseFlowVersion.CommitsSinceVersionSource)
+        --preReleaseLabel=$(ReleaseFlowVersion.PreReleaseLabel)
+        --publisher=$(PublisherId.Develop)
+      displayName: Publish extension
+
+    - task: PackageAzureDevOpsExtension@3
+      displayName: 'Package extension into VSIX file'
+      inputs:
+        rootFolder: $(System.DefaultWorkingDirectory)/dist/
+        outputPath: $(Build.ArtifactStagingDirectory)/$(extensionName)-$(Build.BuildNumber).vsix
+        updateTasksId: true
+        patternManifest: vss-extension.json
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: vsix'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(extensionName)-$(Build.BuildNumber).vsix'
+        ArtifactName: vsix
+
+
+# Publish the extension to the marketplace under the mbstest publisher
+# (for non-release branches)
+- stage: publish_test
+  displayName: Publish (test publisher)
+  dependsOn: build
+  # Condition: only execute this job if either:
+  #  - trunk branch (master / main); OR
+  #  - dev branch AND override parameter is set
+  condition: >-
+    and(
+      succeeded(),
+      or(
+        eq(variables['ReleaseFlow.IsTrunkBranch'], True),
+        and(
+          eq(variables['ReleaseFlow.IsDevBranch'], True),
+          eq(variables['overridePublish'], True)
+        )
+      )
+    )
+
+  jobs:
+  - template: templates/PublishExtension.azp.yml
+    parameters:
+      environmentName: '${{ variables.extensionName }}-test'
+      artifactName: ${{ variables.vsixArtifactName }}
+
+
+# Publish the extension to the marketplace under the mbs-internal publisher
+# (for release branches)
+- stage: publish_release
+  displayName: Publish (release publisher)
+  dependsOn: build
+  # Condition: only execute this job for release builds
+  condition: >-
+    and(
+      succeeded(),
+      or(
+        eq(variables['ReleaseFlow.IsRelease'], True),
+        and(
+          eq(variables['ReleaseFlow.IsReleaseBranch'], True),
+          eq(variables['overridePublish'], True))
+        )
+    )
+
+  jobs:
+  - template: templates/PublishExtension.azp.yml
+    parameters:
+      environmentName: '${{ variables.extensionName }}-release'
+      artifactName: ${{ variables.vsixArtifactName }}
