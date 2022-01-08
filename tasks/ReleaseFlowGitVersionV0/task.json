@@ -112,9 +112,9 @@
       "name": "PreReleaseLabel",
       "description": "The pre-release label that was inferred from the source branch and repository state."
     },
-    { "name": "PreReleaseTag", "description": "The NuGet pre-release tag." },
-    { "name": "PreReleaseTagWithDash", "description": "The NuGet pre-release tag, prefixed with a dash." },
-    { "name": "PreReleaseNumber", "description": "The NuGet pre-release number." },
+    { "name": "PreReleaseTag", "description": "The pre-release tag." },
+    { "name": "PreReleaseTagWithDash", "description": "The pre-release tag, prefixed with a dash." },
+    { "name": "PreReleaseNumber", "description": "The pre-release number." },
     {
       "name": "FullBuildMetaData",
       "description": "The full build metadata, e.g. 1.Branch.release/3.0.0.Sha.28c853159a46b5a87e6cc9c4f6e940c59d6bc68a"

@@ -191,7 +191,7 @@ async function copyTaskFiles(taskName) {
   const taskOutputDir = path.join(outputDir, taskName);
 
   // Copy across task files
-  await copyFilesToOutput(['**/*.js', 'task.json', '!tests/**/*'], taskInputDir, taskOutputDir);
+  await copyFilesToOutput(['**/*.js', 'task.json', 'icon.png', '!tests/**/*'], taskInputDir, taskOutputDir);
 
   taskPatch = argv.major * 10000 + argv.minor * 100 + argv.patch;
 
