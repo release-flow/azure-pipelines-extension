@@ -50,7 +50,7 @@ description of all the configuration file options.
 | `LegacySemVer` | The legacy ([SemVer-1.0.0](https://semver.org/spec/v1.0.0.html)) semantic version, e.g. `3.0.0-beta1`. |
 | `AssemblySemVer` | The assembly version, e.g. `3.2.0.0`. |
 | `AssemblySemFileVer` | The assemby file version, e.g. `3.2.1.0`. |
-| `InformationalVersion` | The assembly informational version, e.g. `3.0.0-beta.1+1.Branch.release/3.0.0.Sha.28c853159a46b5a87e6cc9c4f6e940c59d6bc68a`. |
+| `InformationalVersion` | The assembly informational version, including the semantic version and the full build metadata. |
 | `BranchName` | The name of the branch or tag that triggered the build, e.g. `release/3.0`. |
 | `EscapedBranchName` | The branch name, escaped for SemVer compatibility e.g. `release-3.0`. |
 | `BuildType` | The build type that was inferred from the source branch and repository state. One of: `alpha`, `beta`, `working-branch`, `pull-request`, `release`. |
@@ -64,7 +64,7 @@ description of all the configuration file options.
 | `PreReleaseTag` | The pre-release tag, e.g. `beta.4`. |
 | `PreReleaseTagWithDash` | The pre-release tag, prefixed with a dash, e.g. `-beta.4`. |
 | `PreReleaseNumber` | A strictly-increasing pre-release number that counts the commits since the version source, e.g. `4`. |
-| `FullBuildMetaData` | The full build metadata, e.g. `1.Branch.release/3.0.0.Sha.28c853159a46b5a87e6cc9c4f6e940c59d6bc68a`. |
+| `FullBuildMetaData` | The full build metadata including branch name and Git hash. |
 | `NuGetVersion` | The legacy NuGet-compatible version, e.g. `3.0.0-beta0001`. |
 | `NuGetPreReleaseTag` | The NuGet-compatible pre-release tag, e.g. `beta0001`. |
 
@@ -72,4 +72,4 @@ description of all the configuration file options.
 
 Icons derived from [svgrepo.com](https://www.svgrepo.com/).
 
-Uses the Microsoft [Azure Pipelines Task SDK](https://github.com/microsoft/azure-pipelines-task-lib).
+Built with the Microsoft [Azure Pipelines Task SDK](https://github.com/microsoft/azure-pipelines-task-lib).
