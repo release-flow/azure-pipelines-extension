@@ -1,7 +1,7 @@
 {
   "manifestVersion": 1,
-  "id": "release-flow-git-version",
-  "name": "Release Flow Version",
+  "id": "release-flow-tools",
+  "name": "Release Flow Tools",
   "version": "0.0.0",
   "publisher": "release-flow-dev",
   "public": false,
@@ -14,7 +14,7 @@
       "id": "Microsoft.VisualStudio.Services"
     }
   ],
-  "description": "Tools for versioning builds in Azure Pipelines.",
+  "description": "Tools for versioning with Release Flow in Azure Pipelines.",
   "categories": ["Azure Pipelines"],
   "content": {
     "details": {
@@ -37,11 +37,12 @@
     }
   },
   "branding": {
-    "color": "rgb(6,168,229)",
+    "color": "rgb(250,195,255)",
     "theme": "light"
   },
   "icons": {
-    "default": "images/extension-icon.png"
+    "default": "images/icon-128.png",
+    "large": "images/icon-512.png"
   },
   "files": [
     {
