@@ -83,7 +83,6 @@ function run(command) {
   });
 }
 
-
 async function ensureOutputDir(dirName) {
   const targetDir = path.resolve(outputDir, dirName);
   await fsPromises.mkdir(targetDir, { recursive: true });
@@ -123,7 +122,9 @@ function getExtensionSuffix() {
       break;
 
     default:
-      suffix = argv.preReleaseLabel;
+      // Need to replace unsupported characters -
+      // extensionId may only include letters, numbers, underscores, and dashes
+      suffix = argv.preReleaseLabel.replace(/[^A-Za-z0-9_-]/g, '_');
       break;
   }
 
