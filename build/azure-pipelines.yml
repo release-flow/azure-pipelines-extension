@@ -84,16 +84,11 @@ stages:
         checkLatest: false
 
     - task: Npm@1
-      displayName: 'Build/test the extension'
+      displayName: 'NPM test'
       inputs:
         command: custom
         verbose: false
         customCommand: 'test'
-
-    - script: >
-        echo "TrunkBranch: $(ReleaseFlow.IsTrunkBranch)"
-        echo "DevBranch: $(ReleaseFlow.IsDevBranch)"
-        echo "ReleaseBranch: $(ReleaseFlow.IsReleaseBranch)"
 
     - script: >-
         ./build/build.js
@@ -104,8 +99,8 @@ stages:
         --buildType=$(ReleaseFlowVersion.BuildType)
         --preReleaseNumber=$(ReleaseFlowVersion.CommitsSinceVersionSource)
         --preReleaseLabel=$(ReleaseFlowVersion.PreReleaseLabel)
-        --publisher=$(PublisherId.Develop)
-      displayName: Publish extension
+        --publisher=$(publisherId)
+      displayName: Build extension
 
     - task: PackageAzureDevOpsExtension@3
       displayName: 'Package extension into VSIX file'
@@ -122,7 +117,7 @@ stages:
         ArtifactName: vsix
 
 
-# Publish the extension to the marketplace under the mbstest publisher
+# Publish the extension to the marketplace under the test publisher
 # (for non-release branches)
 - stage: publish_test
   displayName: Publish (test publisher)
@@ -149,7 +144,7 @@ stages:
       artifactName: ${{ variables.vsixArtifactName }}
 
 
-# Publish the extension to the marketplace under the mbs-internal publisher
+# Publish the extension to the marketplace under the public publisher
 # (for release branches)
 - stage: publish_release
   displayName: Publish (release publisher)
