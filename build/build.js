@@ -5,7 +5,7 @@ const path = require('path');
 const del = require('del');
 const fs = require('fs');
 const fsPromises = fs.promises;
-const globby = require('globby');
+let globby; // Imported async in main() because it's ES6 only
 const spawn = require('child_process').spawn;
 const yargs = require('yargs');
 
@@ -99,7 +99,7 @@ async function prepareOutputDir() {
 async function copyFilesToOutput(patterns, rootDir, targetDir) {
   rootDir = rootDir || process.cwd();
   targetDir = targetDir || argv.outputDir;
-  const entries = globby.stream(patterns, { cwd: rootDir, dot: true });
+  const entries = await globby(patterns, { cwd: rootDir, dot: true });
   for await (const entry of entries) {
     await ensureOutputDir(path.dirname(entry));
     const source = path.join(rootDir, entry);
@@ -221,6 +221,12 @@ async function installNpm() {
 }
 
 async function main() {
+  // Globby is ES6-only, meaning we can't require() it or we get a ERR_REQUIRE_ESM error.
+  // This is the resolution, see
+  // https://github.com/sindresorhus/globby/issues/193#issuecomment-1021493812
+  // The preferable solution would be to convert this script into ES6, but one of the other
+  // modules (tfx-cli, IIRC) prevented it.
+  ({ globby } = await import('globby'));
   await prepareOutputDir();
   await copyExtensionFiles();
   await installNpm();
