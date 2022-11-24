@@ -5,6 +5,10 @@ Flow](https://github.com/release-flow/release-flow).
 
 The extension's [readme file](./extension/README.md) provides a user manual.
 
+## Installation
+
+You can install the extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=release-flow-dev.release-flow-tools).
+
 ## Build and Deployment
 
 Unsurprisingly, this repo uses Release Flow conventions :)
