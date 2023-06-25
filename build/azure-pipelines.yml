@@ -58,9 +58,10 @@ stages:
     steps:
     - task: NodeTool@0
       inputs:
-        versionSpec: '12.22.x'
+        versionSource: 'fromFile'
+        versionFilePath: '.nvmrc'
         checkLatest: false
-      displayName: 'Use Node.js version 12.22.x'
+      displayName: 'Use Node.js version from .nvmrc'
 
     - task: Npm@1
       displayName: 'NPM install'
@@ -77,10 +78,10 @@ stages:
       displayName: 'Set build number'
       name: release_flow_version
 
-    - task: TfxInstaller@3
-      displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.9.x'
+    - task: TfxInstaller@4
+      displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.11.x'
       inputs:
-        version: v0.9.x
+        version: v0.11.x
         checkLatest: false
 
     - task: Npm@1
