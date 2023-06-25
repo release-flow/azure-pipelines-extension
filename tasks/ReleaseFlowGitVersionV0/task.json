@@ -68,6 +68,9 @@
   "execution": {
     "Node10": {
       "target": "index.js"
+    },
+    "Node16": {
+      "target": "index.js"
     }
   },
   "outputVariables": [
