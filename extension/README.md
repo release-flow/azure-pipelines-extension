@@ -13,6 +13,13 @@ branch for the build (as per the Azure Pipelines built-in `$(Build.SourceBranch)
 You can find further details about Release Flow conventions and versioning logic in the
 [README](https://github.com/release-flow/release-flow/blob/main/README.md) for the core library that this task uses.
 
+Note: [since September
+2022](https://learn.microsoft.com/en-us/azure/devops/pipelines/repos/azure-repos-git?view=azure-devops&tabs=yaml#shallow-fetch),
+Azure Pipelines by default does a shallow fetch of the git repo. This means that the repo history that the task uses to
+derive the version information is not included in the repo, so the task will not generate the correct values. To fix
+this, set `fetchDepth` to an appropriate value in the checkout step. The depth needs to include at least the most recent
+release branch. If your repo is not too large, we recommend that you use the value `0` to checkout the entire history.
+
 ### Configuration
 
 A file (by default called `rfconfig.yml`) should be present in the repository root directory to configure the behaviour
