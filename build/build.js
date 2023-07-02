@@ -2,7 +2,7 @@
 
 const log = require('loglevel');
 const path = require('path');
-const del = require('del');
+let del; // Imported async in main() because it's ES6 only
 const fs = require('fs');
 const fsPromises = fs.promises;
 let globby; // Imported async in main() because it's ES6 only
@@ -194,16 +194,16 @@ async function copyTaskFiles(taskName) {
   // Copy across task files
   await copyFilesToOutput(['**/*.js', 'task.json', 'icon.png', '!tests/**/*'], taskInputDir, taskOutputDir);
 
-  taskPatch = argv.major * 10000 + argv.minor * 100 + argv.patch;
+  let taskPatch = argv.major * 10000 + argv.minor * 100 + argv.patch;
 
   log.debug(`Pre-release number = ${argv.preReleaseNumber}`);
   if (argv.isPreRelease) {
     // If pre-release we need to add another increment, to ensure that the patch version
     // doesn't collide with a previous task number
-    taskPatch = (taskPatch * 10000) + (argv.preReleaseNumber * 100) + argv.buildNumber
+    taskPatch = (taskPatch * 10000) + (argv.preReleaseNumber * 100) + argv.buildCounter
     log.debug(`Pre-release override of task patch to ${taskPatch}`);
   } else {
-    $taskPatch = ($taskPatch * 100) + $BuildNumber
+    taskPatch = (taskPatch * 100) + argv.buildCounter
     log.debug(`Override of task patch to ${taskPatch}`);
   }
 }
@@ -214,7 +214,7 @@ async function installNpm() {
   // Ensure node_modules in dist
   const command = {
     cmd: 'npm',
-    args: ['ci', '--production'],
+    args: ['ci', '--omit=dev'],
     cwd: outputDir
   }
   await run(command);
@@ -226,6 +226,7 @@ async function main() {
   // https://github.com/sindresorhus/globby/issues/193#issuecomment-1021493812
   // The preferable solution would be to convert this script into ES6, but one of the other
   // modules (tfx-cli, IIRC) prevented it.
+  ({ del } = await import('del'));
   ({ globby } = await import('globby'));
   await prepareOutputDir();
   await copyExtensionFiles();
