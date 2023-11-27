@@ -17,7 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@release-flow/release-flow": "^1.0.0",
-    "azure-pipelines-task-lib": "^4.4.0"
+    "azure-pipelines-task-lib": "^4.7.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.21",
