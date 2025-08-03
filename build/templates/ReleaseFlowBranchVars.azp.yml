@@ -10,32 +10,51 @@ parameters:
   displayName: 'Trunk branch name (e.g. main)'
 
 variables:
+- name: __branch_name__
+  value: ${{ variables['Build.SourceBranch'] }}
 
 # True if this is a build from the trunk branch (e.g. refs/heads/main)
 - name: ReleaseFlow.IsTrunkBranch
-  value: ${{ eq(variables['Build.SourceBranch'], format('refs/heads/{0}', parameters.trunkBranchName)) }}
+  value: >-
+    ${{
+      or(
+        eq(variables['__branch_name__'], parameters.trunkBranchName),
+        eq(variables['__branch_name__'], format('refs/heads/{0}', parameters.trunkBranchName))
+      )
+    }}
 
 # True if this is a release branch build i.e. either a beta or final release
 - name: ReleaseFlow.IsReleaseBranch
   value: >-
     ${{
       or(
-        startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'),
-        startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
+        startsWith(variables['__branch_name__'], 'refs/heads/release/'),
+        startsWith(variables['__branch_name__'], 'release/'),
+        startsWith(variables['__branch_name__'], 'refs/tags/v'),
+        startsWith(variables['__branch_name__'], 'tags/v')
       )
     }}
 
 # True if this is a release build i.e. from a release tag
 - name: ReleaseFlow.IsRelease
-  value: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
+  value: >-
+    ${{
+      or(
+        startsWith(variables['__branch_name__'], 'refs/tags/v'),
+        startsWith(variables['__branch_name__'], 'tags/v')
+      )
+    }}
 
 # True if this is a build from a standard dev branch
 - name: ReleaseFlow.IsDevBranch
   value: >-
     ${{
       or(
-        startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/'),
-        startsWith(variables['Build.SourceBranch'], 'refs/heads/bugfix/'),
-        startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix/')
+        startsWith(variables['__branch_name__'], 'feature/'),
+        startsWith(variables['__branch_name__'], 'refs/heads/feature/'),
+        startsWith(variables['__branch_name__'], 'bugfix/'),
+        startsWith(variables['__branch_name__'], 'refs/heads/bugfix/'),
+        startsWith(variables['__branch_name__'], 'hotfix/'),
+        startsWith(variables['__branch_name__'], 'refs/heads/hotfix/')
       )
     }}
