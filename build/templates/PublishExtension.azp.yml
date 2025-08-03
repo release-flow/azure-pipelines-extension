@@ -41,17 +41,18 @@ jobs:
         steps:
         - task: NodeTool@0
           inputs:
-            versionSpec: '12.22.x'
+            versionSource: 'fromFile'
+            versionFilePath: '.nvmrc'
             checkLatest: false
-          displayName: 'Use Node.js version 12.22.x'
+          displayName: 'Use Node.js version from .nvmrc'
 
-        - task: TfxInstaller@3
-          displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.9.x'
+        - task: TfxInstaller@4
+          displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.21.x'
           inputs:
-            version: v0.9.x
+            version: v0.21.x
             checkLatest: false
 
-        - task: PublishAzureDevOpsExtension@3
+        - task: PublishAzureDevOpsExtension@4
           displayName: 'Publish Extension to marketplace'
           inputs:
             connectedServiceName: 'marketplace-publish'

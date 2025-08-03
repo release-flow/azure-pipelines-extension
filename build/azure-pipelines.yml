@@ -80,9 +80,9 @@ stages:
       name: release_flow_version
 
     - task: TfxInstaller@4
-      displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.11.x'
+      displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.21.x'
       inputs:
-        version: v0.11.x
+        version: v0.21.x
         checkLatest: false
 
     - task: Npm@1
