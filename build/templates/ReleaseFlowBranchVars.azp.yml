@@ -10,6 +10,8 @@ parameters:
   displayName: 'Trunk branch name (e.g. main)'
 
 variables:
+- name: __branch_name__
+  value: ${{ variables['Build.SourceBranch'] }}
 
 # True if this is a build from the trunk branch (e.g. refs/heads/main)
 - name: ReleaseFlow.IsTrunkBranch

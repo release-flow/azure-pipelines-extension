@@ -58,6 +58,7 @@ stages:
 
     steps:
     - script: |
+        echo "__branch_name__: $(__branch_name__)"
         echo "Build.SourceBranch: $(Build.SourceBranch)"
         echo "IsReleaseBranch: $(ReleaseFlow.IsReleaseBranch)"
         echo "IsTrunkBranch: $(ReleaseFlow.IsTrunkBranch)"
