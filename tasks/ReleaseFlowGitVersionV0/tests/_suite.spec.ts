@@ -165,8 +165,7 @@ describe('ReleaseFlowGitVersion tests', function () {
     expect(tr.warningIssues.length).to.equal(0, 'should have no warnings');
     expect(tr.errorIssues.length).to.equal(0, 'should have no errors');
 
-    console.log(tr.stdout);
-    expect(tr.stdOutContained("##vso[task.debug]Current directory: '/build/sourcesDirectory'")).to.equal(
+    expect(tr.stdOutContained("Using default repoRoot")).to.equal(
       true,
       'uses Build.SourcesDirectory'
     );

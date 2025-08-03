@@ -77,6 +77,8 @@ async function run(): Promise<void> {
       log.info(`Using non-standard repoRoot = ${repoRoot}`);
       tl.pushd(repoRoot);
       pushd = true;
+    } else {
+      log.info('Using default repoRoot');
     }
 
     const updateBuildNumber = tl.getBoolInput('updateBuildNumber');
