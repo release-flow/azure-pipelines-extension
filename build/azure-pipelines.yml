@@ -57,6 +57,14 @@ stages:
         value: $(PublisherId.Develop)
 
     steps:
+    - script: |
+        echo "Build.SourceBranch: $(Build.SourceBranch)"
+        echo "IsReleaseBranch: $(ReleaseFlow.IsReleaseBranch)"
+        echo "IsTrunkBranch: $(ReleaseFlow.IsTrunkBranch)"
+        echo "IsDevBranch: $(ReleaseFlow.IsDevBranch)"
+        echo "IsRelease: $(ReleaseFlow.IsRelease)"
+      displayName: 'Print diagnostic variables'
+
     - task: NodeTool@0
       inputs:
         versionSource: 'fromFile'
