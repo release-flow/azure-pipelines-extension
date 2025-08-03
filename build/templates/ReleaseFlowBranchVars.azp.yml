@@ -13,7 +13,13 @@ variables:
 
 # True if this is a build from the trunk branch (e.g. refs/heads/main)
 - name: ReleaseFlow.IsTrunkBranch
-  value: ${{ eq(variables['Build.SourceBranch'], format('refs/heads/{0}', parameters.trunkBranchName)) }}
+  value: >-
+    ${{
+      or(
+        eq(variables['Build.SourceBranch'], parameters.trunkBranchName),
+        eq(variables['Build.SourceBranch'], format('refs/heads/{0}', parameters.trunkBranchName))
+      )
+    }}
 
 # True if this is a release branch build i.e. either a beta or final release
 - name: ReleaseFlow.IsReleaseBranch
@@ -21,21 +27,32 @@ variables:
     ${{
       or(
         startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'),
-        startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
+        startsWith(variables['Build.SourceBranch'], 'release/'),
+        startsWith(variables['Build.SourceBranch'], 'refs/tags/v'),
+        startsWith(variables['Build.SourceBranch'], 'tags/v')
       )
     }}
 
 # True if this is a release build i.e. from a release tag
 - name: ReleaseFlow.IsRelease
-  value: ${{ startsWith(variables['Build.SourceBranch'], 'refs/tags/v') }}
+  value: >-
+    ${{
+      or(
+        startsWith(variables['Build.SourceBranch'], 'refs/tags/v'),
+        startsWith(variables['Build.SourceBranch'], 'tags/v')
+      )
+    }}
 
 # True if this is a build from a standard dev branch
 - name: ReleaseFlow.IsDevBranch
   value: >-
     ${{
       or(
+        startsWith(variables['Build.SourceBranch'], 'feature/'),
         startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/'),
+        startsWith(variables['Build.SourceBranch'], 'bugfix/'),
         startsWith(variables['Build.SourceBranch'], 'refs/heads/bugfix/'),
+        startsWith(variables['Build.SourceBranch'], 'hotfix/'),
         startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix/')
       )
     }}
