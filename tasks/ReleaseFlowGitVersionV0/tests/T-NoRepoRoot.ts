@@ -36,7 +36,7 @@ tmr.setAnswers(mockedAnswers);
 
 tmr.setInput('sourceBranch', 'refs/heads.master');
 tmr.setInput('repoRoot', '');
-tmr.setInput('system.debug', 'true');
+tmr.setVariableName('system.debug', 'true');
 tmr.registerMock('@release-flow/release-flow', MockCalculatorLib);
 
 tmr.run();
