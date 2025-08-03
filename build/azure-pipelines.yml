@@ -20,6 +20,9 @@ trigger:
     # - bugfix/*
     # - hotfix/*
 
+pool:
+  vmImage: 'ubuntu-24.04'
+
 variables:
 - template: templates/ReleaseFlowBranchVars.azp.yml
   parameters:
@@ -46,8 +49,6 @@ stages:
   jobs:
   - job: Build
     displayName: Build and test
-    pool:
-      vmImage: 'ubuntu-20.04'
     variables:
     - name: publisherId
       ${{ if eq(variables['ReleaseFlow.IsReleaseBranch'], True) }}:
