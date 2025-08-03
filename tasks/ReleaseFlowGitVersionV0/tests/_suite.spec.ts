@@ -13,13 +13,13 @@ function confirmVariableAssigned(tr: ttm.MockTestRunner, name: string, value: st
 const TestTimeout = 60000; // ms
 
 describe('ReleaseFlowGitVersion tests', function () {
-  it('should succeed with prerelease output', function (done: Mocha.Done) {
+  it('should succeed with prerelease output', async function () {
     this.timeout(TestTimeout);
 
     const tp = path.join(__dirname, 'T-PreRelease.js');
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
-    tr.run();
+    await tr.runAsync();
 
     expect(tr.succeeded).to.equal(true, 'should have succeeded');
     expect(tr.warningIssues.length).to.equal(0, 'should have no warnings');
@@ -62,17 +62,15 @@ describe('ReleaseFlowGitVersion tests', function () {
     confirmVariableAssigned(tr, 'NuGetPreReleaseTag', 'feature-test-stuff0004');
 
     expect(tr.stdOutContained('##vso[build.updatebuildnumber]')).to.equal(false, 'Build number not updated');
-
-    done();
   });
 
-  it('should succeed with release output', function (done: Mocha.Done) {
+  it('should succeed with release output', async function () {
     this.timeout(TestTimeout);
 
     const tp = path.join(__dirname, 'T-Release.js');
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
-    tr.run();
+    await tr.runAsync();
 
     expect(tr.succeeded).to.equal(true, 'should have succeeded');
     expect(tr.warningIssues.length).to.equal(0, 'should have no warnings');
@@ -111,17 +109,15 @@ describe('ReleaseFlowGitVersion tests', function () {
     confirmVariableAssigned(tr, 'NuGetPreReleaseTag', '');
 
     expect(tr.stdOutContained('##vso[build.updatebuildnumber]')).to.equal(false, 'Build number not updated');
-
-    done();
   });
 
-  it('should fail when sourceBranch not specified', function (done: Mocha.Done) {
+  it('should fail when sourceBranch not specified', async function () {
     this.timeout(TestTimeout);
 
     const tp = path.join(__dirname, 'T-NoSourceBranch.js');
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
-    tr.run();
+    await tr.runAsync();
 
     expect(tr.failed).to.equal(true, 'should have failed');
     expect(tr.warningIssues.length).to.equal(0, 'should have no warnings');
@@ -129,47 +125,41 @@ describe('ReleaseFlowGitVersion tests', function () {
       true,
       'should have errored for missing input'
     );
-
-    done();
   });
 
-  it('should succeed when targetBranch not specified', function (done: Mocha.Done) {
+  it('should succeed when targetBranch not specified', async function () {
     this.timeout(TestTimeout);
 
     const tp = path.join(__dirname, 'T-Release.js');
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
-    tr.run();
+    await tr.runAsync();
 
     expect(tr.succeeded).to.equal(true, 'should have succeeded');
     expect(tr.warningIssues.length).to.equal(0, 'should have no warnings');
     expect(tr.errorIssues.length).to.equal(0, 'should have no errors');
-
-    done();
   });
 
-  it('should succeed when targetBranch specified', function (done: Mocha.Done) {
+  it('should succeed when targetBranch specified', async function () {
     this.timeout(TestTimeout);
 
     const tp = path.join(__dirname, 'T-TargetBranch.js');
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
-    tr.run();
+    await tr.runAsync();
 
     expect(tr.succeeded).to.equal(true, 'should have succeeded');
     expect(tr.warningIssues.length).to.equal(0, 'should have no warnings');
     expect(tr.errorIssues.length).to.equal(0, 'should have no errors');
-
-    done();
   });
 
-  it('should use Build.SourcesDirectory when repoRoot not specified', function (done: Mocha.Done) {
+  it('should use Build.SourcesDirectory when repoRoot not specified', async function () {
     this.timeout(TestTimeout);
 
     const tp = path.join(__dirname, 'T-NoRepoRoot.js');
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
-    tr.run();
+    await tr.runAsync();
 
     expect(tr.succeeded).to.equal(true, 'should have succeeded');
     expect(tr.warningIssues.length).to.equal(0, 'should have no warnings');
@@ -179,32 +169,29 @@ describe('ReleaseFlowGitVersion tests', function () {
       true,
       'uses Build.SourcesDirectory'
     );
-
-    done();
   });
 
-  it('should use repoRoot when specified', function (done: Mocha.Done) {
+  it('should use repoRoot when specified', async function () {
     this.timeout(TestTimeout);
 
     const tp = path.join(__dirname, 'T-RepoRootSpecified.js');
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
-    tr.run();
+    await tr.runAsync();
 
     expect(tr.succeeded).to.equal(true, 'should have succeeded');
     expect(tr.warningIssues.length).to.equal(0, 'should have no warnings');
     expect(tr.errorIssues.length).to.equal(0, 'should have no errors');
     expect(tr.stdOutContained('Using non-standard repoRoot = /foo/bar')).to.equal(true, 'uses repoRoot when specified');
-    done();
   });
 
-  it('should warn when YAML config not present', function (done: Mocha.Done) {
+  it('should warn when YAML config not present', async function () {
     this.timeout(TestTimeout);
 
     const tp = path.join(__dirname, 'T-NoYamlConfig.js');
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
-    tr.run();
+    await tr.runAsync();
 
     expect(tr.succeeded).to.equal(true, 'should have succeeded');
     expect(tr.createdWarningIssue(`Config file '${ConfigFileName}' not found - using default options`)).to.equal(
@@ -217,17 +204,15 @@ describe('ReleaseFlowGitVersion tests', function () {
     confirmVariableAssigned(tr, 'Major', '1');
     confirmVariableAssigned(tr, 'Minor', '2');
     confirmVariableAssigned(tr, 'Patch', '3');
-
-    done();
   });
 
-  it('should update build number when variable is set', function (done: Mocha.Done) {
+  it('should update build number when variable is set', async function () {
     this.timeout(TestTimeout);
 
     const tp = path.join(__dirname, 'T-UpdateBuildNumber.js');
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
-    tr.run();
+    await tr.runAsync();
 
     expect(tr.succeeded).to.equal(true, 'should have succeeded');
     expect(tr.warningIssues.length).to.equal(0, 'should have no warnings');
@@ -237,7 +222,5 @@ describe('ReleaseFlowGitVersion tests', function () {
       true,
       'Build number updated'
     );
-
-    done();
   });
 });
