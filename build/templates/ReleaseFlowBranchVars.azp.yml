@@ -18,8 +18,8 @@ variables:
   value: >-
     ${{
       or(
-        eq(variables['Build.SourceBranch'], parameters.trunkBranchName),
-        eq(variables['Build.SourceBranch'], format('refs/heads/{0}', parameters.trunkBranchName))
+        eq(variables['__branch_name__'], parameters.trunkBranchName),
+        eq(variables['__branch_name__'], format('refs/heads/{0}', parameters.trunkBranchName))
       )
     }}
 
@@ -28,10 +28,10 @@ variables:
   value: >-
     ${{
       or(
-        startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'),
-        startsWith(variables['Build.SourceBranch'], 'release/'),
-        startsWith(variables['Build.SourceBranch'], 'refs/tags/v'),
-        startsWith(variables['Build.SourceBranch'], 'tags/v')
+        startsWith(variables['__branch_name__'], 'refs/heads/release/'),
+        startsWith(variables['__branch_name__'], 'release/'),
+        startsWith(variables['__branch_name__'], 'refs/tags/v'),
+        startsWith(variables['__branch_name__'], 'tags/v')
       )
     }}
 
@@ -40,8 +40,8 @@ variables:
   value: >-
     ${{
       or(
-        startsWith(variables['Build.SourceBranch'], 'refs/tags/v'),
-        startsWith(variables['Build.SourceBranch'], 'tags/v')
+        startsWith(variables['__branch_name__'], 'refs/tags/v'),
+        startsWith(variables['__branch_name__'], 'tags/v')
       )
     }}
 
@@ -50,11 +50,11 @@ variables:
   value: >-
     ${{
       or(
-        startsWith(variables['Build.SourceBranch'], 'feature/'),
-        startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/'),
-        startsWith(variables['Build.SourceBranch'], 'bugfix/'),
-        startsWith(variables['Build.SourceBranch'], 'refs/heads/bugfix/'),
-        startsWith(variables['Build.SourceBranch'], 'hotfix/'),
-        startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix/')
+        startsWith(variables['__branch_name__'], 'feature/'),
+        startsWith(variables['__branch_name__'], 'refs/heads/feature/'),
+        startsWith(variables['__branch_name__'], 'bugfix/'),
+        startsWith(variables['__branch_name__'], 'refs/heads/bugfix/'),
+        startsWith(variables['__branch_name__'], 'hotfix/'),
+        startsWith(variables['__branch_name__'], 'refs/heads/hotfix/')
       )
     }}
