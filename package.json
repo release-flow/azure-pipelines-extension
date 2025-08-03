@@ -34,7 +34,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "globby": "^13.1.1",
     "loglevel": "^1.8.0",
-    "mocha": "^10.0.0",
+    "mocha": "^10.8.2",
     "prettier": "^2.3.2",
     "rimraf": "^5.0.1",
     "tfx-cli": "^0.15.0",
