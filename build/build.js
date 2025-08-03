@@ -170,6 +170,8 @@ async function mungeExtensionManifest() {
     manifest.public = true;
   }
 
+  manifest.publisher = argv.publisher;
+
   log.debug(`Override extension version = ${manifest.version}`);
 
   const data = JSON.stringify(manifest);
